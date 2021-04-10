@@ -1,0 +1,114 @@
+{
+  "nodes": [
+    {
+      "label": "xyffffz",
+      "x": -388.79730224609375,
+      "y": 329.1866149902344,
+      "id": "0",
+      "attributes": {
+        "Eccentricity": "2.0",
+        "Closeness Centrality": "0.5164128151260504",
+        "Betweenness Centrality": "107328.42520211976",
+        "PageRank": "1.2182179501068428E-4",
+        "Harmonic Closeness Centrality": "0.5317823544368167"
+      },
+      "color": "rgb(10,100,192)",
+      "size": 50.0
+    },
+    {
+      "label": "1777 in the United States",
+      "x": 481.65936279296875,
+      "y": -523.997802734375,
+      "id": "2",
+      "attributes": {
+        "Eccentricity": "2.0",
+        "Closeness Centrality": "0.7232142857142857",
+        "Betweenness Centrality": "8504.74345238092",
+        "PageRank": "0.0011241648329509996",
+        "Harmonic Closeness Centrality": "0.808641975308642"
+      },
+      "color": "rgb(192,192,192)",
+      "size": 33.473052978515625
+    },
+    {
+      "label": "1778 in the United States",
+      "x": 382.6347351074219,
+      "y": -484.3379211425781,
+      "id": "3",
+      "attributes": {
+        "Eccentricity": "2.0",
+        "Closeness Centrality": "0.6436781609195402",
+        "Betweenness Centrality": "9087.499999999987",
+        "PageRank": "0.0011053535895125953",
+        "Harmonic Closeness Centrality": "0.7232142857142857"
+      },
+      "color": "rgb(192,192,192)",
+      "size": 33.393211364746094
+    },
+    {
+      "label": "1776 in the United States",
+      "x": 457.8848876953125,
+      "y": -598.8627319335938,
+      "id": "1",
+      "attributes": {
+        "Eccentricity": "1.0",
+        "Closeness Centrality": "1.0",
+        "Betweenness Centrality": "9498.166666666672",
+        "PageRank": "0.0011432961915862024",
+        "Harmonic Closeness Centrality": "1.0"
+      },
+      "color": "rgb(192,192,192)",
+      "size": 33.552894592285156
+    }
+  ],
+  "edges": [
+    {
+      "source": "0",
+      "target": "1",
+      "id": "0",
+      "attributes": {},
+      "color": "rgb(192,192,192)",
+      "size": 1.0
+    },
+    {
+      "source": "3",
+      "target": "1",
+      "id": "618",
+      "attributes": {},
+      "color": "rgb(192,192,192)",
+      "size": 1.0
+    },
+    {
+      "source": "3",
+      "target": "2",
+      "id": "619",
+      "attributes": {},
+      "color": "rgb(192,192,192)",
+      "size": 1.0
+    },
+    {
+      "source": "0",
+      "target": "2",
+      "id": "1",
+      "attributes": {},
+      "color": "rgb(192,192,192)",
+      "size": 1.0
+    },
+    {
+      "source": "0",
+      "target": "3",
+      "id": "2",
+      "attributes": {},
+      "color": "rgb(14,100,150)",
+      "size": 1.0
+    },
+    {
+      "source": "2",
+      "target": "1",
+      "id": "579",
+      "attributes": {},
+      "color": "rgb(192,192,192)",
+      "size": 1.0
+    }
+  ]
+}
