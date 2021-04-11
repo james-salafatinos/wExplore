@@ -21,20 +21,36 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/src/network");
   console.log("User's desired wikipedia page...: ", req.query);
 
-  // spawn new child process to call the python script
-  // spawn new child process to call the python script
-  let x = "and joy to the world";
-  const process = spawn("python", ["./utils/main.py", req.query.new_graph]);
+  let validate_req = function (req) {
+    if (req.query.new_graph) {
+      check_val = req.query.new_graph;
+      if (check_val.length > 3) {
+        console.log(check_val);
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
 
-  // collect data from script
-  process.stdout.on("data", (data) => {
-    console.log(data.toString());
-  });
+  if (validate_req(req)) {
+    // spawn new child process to call the python script
+    const process = spawn("python", ["./utils/main.py", req.query.new_graph]);
 
-  // in close event we are sure that stream is from child process is closed
-  process.on("close", (code) => {
-    console.log(`child process close all stdio with code ${code}`);
-  });
+    // collect data from script
+    process.stdout.on("data", (data) => {
+      console.log(data.toString());
+    });
+
+    // in close event we are sure that stream is from child process is closed
+    process.on("close", (code) => {
+      console.log(`child process close all stdio with code ${code}`);
+    });
+  } else {
+    console.log("No python scripts to be run");
+  }
 });
 
 //Express config to enable the model serving of static javascript file
