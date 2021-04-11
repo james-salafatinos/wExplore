@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.1draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.1draft http://www.gexf.net/1.1draft/gexf.xsd" version="1.1">
+  <meta lastmodifieddate="2021-04-11">
+    <creator>NetworkX 2.5</creator>
+  </meta>
+  <graph defaultedgetype="directed" mode="static" name="">
+    <nodes>
+      <node id="Ann Arbor, Michigan" label="Ann Arbor, Michigan" />
+      <node id="1,4-Dioxane" label="1,4-Dioxane" />
+      <node id="1860 United States census" label="1860 United States census" />
+      <node id="1,1,1-Trichloroethane" label="1,1,1-Trichloroethane" />
+      <node id="1,2-Dioxane" label="1,2-Dioxane" />
+      <node id="1790 United States census" label="1790 United States census" />
+      <node id="1800 United States census" label="1800 United States census" />
+    </nodes>
+    <edges>
+      <edge source="Ann Arbor, Michigan" target="1,4-Dioxane" id="0" />
+      <edge source="Ann Arbor, Michigan" target="1860 United States census" id="1" />
+      <edge source="1,4-Dioxane" target="1,1,1-Trichloroethane" id="2" />
+      <edge source="1,4-Dioxane" target="1,2-Dioxane" id="3" />
+      <edge source="1860 United States census" target="1790 United States census" id="4" />
+      <edge source="1860 United States census" target="1800 United States census" id="5" />
+    </edges>
+  </graph>
+</gexf>

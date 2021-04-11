@@ -9,6 +9,7 @@ notes.txt
 *.py
 
 accessor.js
+*.utils/__pycache__
 
 .env
 #Secret
