@@ -11,9 +11,12 @@ notes.txt
 accessor.js
 *.utils/__pycache__
 
+*.ipynb_checkpoints
 .env
 #Secret
 secret.json
+
+*__pycache__/
 
 # compiled output
 /dist
