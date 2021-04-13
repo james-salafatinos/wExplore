@@ -6,16 +6,16 @@ SSL
 notes.txt
 
 *.ipynb
-*.py
+
 
 accessor.js
-*.utils/__pycache__
 
 *.ipynb_checkpoints
 .env
 #Secret
 secret.json
 
+*.virtual_documents
 *__pycache__/
 
 # compiled output
