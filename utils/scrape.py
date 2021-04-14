@@ -11,6 +11,16 @@ def write_to_gexf(list_of_tuple_edges, output_location):
     return None
 
 
+def buildURL(params, url, continue_token = None):
+    url = url + "?origin=*"
+    
+    if continue_token:
+        params['plcontinue'] = continue_token
+    
+    for k in params:
+        url += "&"+k+"="+str(params[k])
+    return url
+
 def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
     db = {}
     URL = "https://en.wikipedia.org/w/api.php"
@@ -24,27 +34,38 @@ def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
         'ascii': 2,
     }
 
-    def buildURL(params, url):
-        url = url + "?origin=*"
-        for k in params:
-            url += "&"+k+"="+str(params[k])
-        return url
 
-    def initial_run():
-        r = requests.get(buildURL(params, URL))
+    def initial_run(continue_token = None):
+        #Request
+        r = requests.get(buildURL(params, URL, continue_token = continue_token))
         res = r.json()
         pages = res['query']['pages'].keys()
+        
+        #Decide whether to continue
+        continue_flag = False
+        if 'continue' in res:
+            continue_flag = True
+            continue_token = res['continue']['plcontinue']
+        
+        #Gather links
         for p in pages:
             page_title = res['query']['pages'][p]['title']
-            db[page_title] = []
+            if page_title not in db:
+                db[page_title] = []
+ 
             links = res['query']['pages'][p]['links']
             for l in links:
                 db[page_title].append(l['title'])
-
-        print('Done with Initial Run')
-        return None
+                
+        #Decide next state, dependent on continue
+        if continue_flag:
+            return initial_run(continue_token)
+        else:             
+            return None
+            
 
     def second_run():
+        print("Starting second run...")
         for each_link in list(db.values())[0]:
             params_new = {
                 'action': "query",
@@ -52,30 +73,50 @@ def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
                 'titles': str(each_link),
                 'prop': "links",
                 'pllimit': second_leaf_limit,
+                'plnamespace':0,
                 'ascii': 2,
             }
-            try:
-                r = requests.get(buildURL(params_new, URL))
+           
+            
+            def internal_second_run(continue_token = None):
+                print("Starting internal_second_run...")
+                r = requests.get(buildURL(params_new, URL,continue_token = continue_token))
                 res = r.json()
                 pages = res['query']['pages'].keys()
+
+                #Decide whether to continue
+                continue_flag = False
+                if 'continue' in res:
+                    print('Continue Flag Tripped for: ', each_link)
+                    continue_flag = True
+                    continue_token = res['continue']['plcontinue']
+                    print(continue_token)
+                    
                 try:
+
                     for p in pages:
                         page_title = res['query']['pages'][p]['title']
-                        db[page_title] = []
-                        try:
-                            links = res['query']['pages'][p]['links']
-                            for l in links:
-                                db[page_title].append(l['title'])
-                        except:
-                            print("Error on link, inside, inside:", each_link)
+                        if page_title not in db:
+                            db[page_title] = []
 
-                    print("On Second run, done with link:", each_link)
-                except:
-                    print("Error on link, inside:", each_link)
+                        links = res['query']['pages'][p]['links']
+                        for l in links:
+                            db[page_title].append(l['title'])
+                except Exception as e:
+                    print("Could not add links to the page...,", e)
 
-            except:
-                print("Error on link, outer:", each_link)
+
+                #Decide next state, dependent on continue
+                if continue_flag:
+                    print('ABOUT TO SEND CONTINUE TOKEN: ', continue_token, 'FOR', each_link)
+                    return internal_second_run(continue_token)
+                else:
+                    return None
+        
+            internal_second_run()
         return None
+
+    
 
     initial_run()
     second_run()

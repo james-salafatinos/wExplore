@@ -7,6 +7,7 @@ notes.txt
 
 *.ipynb
 
+/archive
 
 accessor.js
 
@@ -15,6 +16,8 @@ accessor.js
 #Secret
 secret.json
 
+utils/__pycache__
+utils/.ipynb_checkpoints
 *.virtual_documents
 *__pycache__/
 

@@ -13,21 +13,21 @@ if __name__ == "__main__":
     try:
         getData(
             start_link=sys.argv[1],
-            first_leaf_limit=10,
-            second_leaf_limit=10,
+            first_leaf_limit=500,
+            second_leaf_limit=500,
             output_location='data/history.gexf')
     except Exception as e:
         print("Error in getting data...", e)
 
     # Parse/Prepare Data
+    print('ABOUT TO START PARSING THE DATA FOR SIGMA.JS')
     try:
 
         try:
             G = nx.read_gexf('./data/history.gexf')
-            G = filter_nodes(G, level=0)
+            G = filter_nodes(G, level=1)
         except Exception as e:
             print("error at reading in G and filtering...", e)
-        # print(G.nodes)
         try:
             embeddings = compute_embeddings(G)
         except Exception as e:

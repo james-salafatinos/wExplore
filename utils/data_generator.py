@@ -2,16 +2,21 @@ import networkx as nx
 from fa2 import ForceAtlas2
 
 
-def filter_nodes(G, level=0):
+def filter_nodes(G, level=1):
+
     if level == 0:
         return G
     else:
+
+        # READ FIRST: <10 means remove anything with a dgree less than 10
         remove = [node for node, degree in dict(
-            G.degree()).items() if degree > 100]
-        remove2 = [node for node, degree in dict(
-            G.degree()).items() if degree < 20]
+            G.degree()).items() if degree < 3]
+        # remove2 = [node for node, degree in dict(
+        #     G.degree()).items() if degree > 200]
         G.remove_nodes_from(remove)
-        G.remove_nodes_from(remove2)
+        # G.remove_nodes_from(remove2)
+        B = sorted(G.degree, key=lambda x: x[1], reverse=False)
+        print(B)
         return G
 
 
