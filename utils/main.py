@@ -1,8 +1,10 @@
 from scrape import getData
 import sys
 import networkx as nx
-from data_generator import filter_nodes, compute_embeddings, generate_data
+from data_generator import filter_nodes, compute_embeddings, generate_data, get_page_rank_and_colors
 import json
+import time
+
 
 print("Hello, in main.py")
 
@@ -32,14 +34,19 @@ if __name__ == "__main__":
             embeddings = compute_embeddings(G)
         except Exception as e:
             print("error at generating embeddings...", e)
-        # print(embeddings)
         try:
-            converted_data_for_sigmajs = generate_data(G, embeddings)
+            color_map = get_page_rank_and_colors(G)
+        except Exception as e:
+            print("error at generating color map...", e)
+        try:
+            converted_data_for_sigmajs = generate_data(
+                G, embeddings, color_map)
         except Exception as e:
             print("error at converting for sigmajs..", e)
         # print(converted_data_for_sigmajs)
         try:
-            with open('./src/network/data.json', 'w') as f:
+            print("Now dumping the JSON!")
+            with open('./src/network/data.json', 'w', encoding = 'utf-8') as f:
                 json.dump(converted_data_for_sigmajs, f)
         except Exception as e:
             print("error at actually dumping sigmajs the json..", e)

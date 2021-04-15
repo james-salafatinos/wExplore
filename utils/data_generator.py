@@ -3,6 +3,7 @@ from fa2 import ForceAtlas2
 
 
 def filter_nodes(G, level=1):
+    print('In filter nodes....')
 
     if level == 0:
         return G
@@ -11,19 +12,54 @@ def filter_nodes(G, level=1):
         # READ FIRST: <10 means remove anything with a dgree less than 10
         remove = [node for node, degree in dict(
             G.degree()).items() if degree < 3]
-        # remove2 = [node for node, degree in dict(
-        #     G.degree()).items() if degree > 200]
+        remove2 = [node for node in G.nodes if '(identifier)' in node]
         G.remove_nodes_from(remove)
-        # G.remove_nodes_from(remove2)
+        G.remove_nodes_from(remove2)
         B = sorted(G.degree, key=lambda x: x[1], reverse=False)
-        print(B)
+        print("First entry in the filtered and sorted by degree graph, ", B[0])
         return G
+
+
+def get_page_rank_and_colors(G):
+    """
+    Takes a networkx Graph and returns the color by page rank dictionary by node.
+    Ex: {'FL Studio':0.0031,
+         'DAW': 0.0001}
+
+    Page rank will always add up to 1 for the entire array.
+    """
+    import pandas as pd
+    from matplotlib import cm
+    import numpy as np
+
+    PR = nx.algorithms.link_analysis.pagerank_alg.pagerank(G)
+    #cum_sum_page_rank = np.cumsum(pd.Series(PR).sort_values())
+    list_of_PR = pd.Series(PR).sort_values()
+
+    def normalize(a_list):
+        a = a_list
+        amin, amax = min(a), max(a)
+        for i, val in enumerate(a):
+            a[i] = (val-amin) / (amax-amin)
+        return a
+
+    color_values_from_PR = normalize(list_of_PR)
+
+    cmap = cm.get_cmap('winter_r', 12)
+
+    node_color_map = {}
+    for k, v in dict(color_values_from_PR).items():
+        rgba = list(map((lambda x: int(x*255//1)), [*cmap(v)]))
+        rgba_str = f'rgb({rgba[0]},{rgba[1]},{rgba[2]})'
+        node_color_map[k] = rgba_str
+
+    return node_color_map
 
 
 def compute_embeddings(G):
     forceatlas2 = ForceAtlas2(
         # Behavior alternatives
-        outboundAttractionDistribution=True,  # Dissuade hubs
+        outboundAttractionDistribution=False,  # Dissuade hubs
         linLogMode=False,  # NOT IMPLEMENTED
         adjustSizes=False,  # Prevent overlap (NOT IMPLEMENTED)
         edgeWeightInfluence=1.0,
@@ -37,18 +73,18 @@ def compute_embeddings(G):
         # Tuning
         scalingRatio=2.0,
         strongGravityMode=False,
-        gravity=1.0,
+        gravity=1,
 
         # Log
         verbose=True)
 
     positions = forceatlas2.forceatlas2_networkx_layout(
-        G, pos=None, iterations=2000)
+        G, pos=None, iterations=200)
 
     return positions
 
 
-def generate_data(G, pos):
+def generate_data(G, pos, color_map):
     def convert_one_node(label='default', x=0, y=0, _id=0, attributes={}, color="rgb(192,192,192)", size=50):
         _dict = {
             "label": label,
@@ -56,7 +92,7 @@ def generate_data(G, pos):
             "y": y,
             "id": _id,
             "attributes": attributes,
-            "color": color,
+            "color": color_map[label],
             "size": size,
         }
 

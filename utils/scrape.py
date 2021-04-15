@@ -6,20 +6,20 @@ def write_to_gexf(list_of_tuple_edges, output_location):
     import networkx as nx
     G = nx.DiGraph()
     G.add_edges_from(list_of_tuple_edges)
-    nx.write_gexf(G, output_location, encoding='utf-8',
-                  prettyprint=True, version='1.1draft')
+    nx.write_gexf(G, output_location, encoding='utf-8', version='1.1draft')
     return None
 
 
-def buildURL(params, url, continue_token = None):
+def buildURL(params, url, continue_token=None):
     url = url + "?origin=*"
-    
+
     if continue_token:
         params['plcontinue'] = continue_token
-    
+
     for k in params:
         url += "&"+k+"="+str(params[k])
     return url
+
 
 def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
     db = {}
@@ -34,35 +34,33 @@ def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
         'ascii': 2,
     }
 
-
-    def initial_run(continue_token = None):
-        #Request
-        r = requests.get(buildURL(params, URL, continue_token = continue_token))
+    def initial_run(continue_token=None):
+        # Request
+        r = requests.get(buildURL(params, URL, continue_token=continue_token))
         res = r.json()
         pages = res['query']['pages'].keys()
-        
-        #Decide whether to continue
+
+        # Decide whether to continue
         continue_flag = False
         if 'continue' in res:
             continue_flag = True
             continue_token = res['continue']['plcontinue']
-        
-        #Gather links
+
+        # Gather links
         for p in pages:
             page_title = res['query']['pages'][p]['title']
             if page_title not in db:
                 db[page_title] = []
- 
+
             links = res['query']['pages'][p]['links']
             for l in links:
                 db[page_title].append(l['title'])
-                
-        #Decide next state, dependent on continue
+
+        # Decide next state, dependent on continue
         if continue_flag:
             return initial_run(continue_token)
-        else:             
+        else:
             return None
-            
 
     def second_run():
         print("Starting second run...")
@@ -73,25 +71,25 @@ def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
                 'titles': str(each_link),
                 'prop': "links",
                 'pllimit': second_leaf_limit,
-                'plnamespace':0,
+                'plnamespace': 0,
                 'ascii': 2,
             }
-           
-            
-            def internal_second_run(continue_token = None):
+
+            def internal_second_run(continue_token=None):
                 print("Starting internal_second_run...")
-                r = requests.get(buildURL(params_new, URL,continue_token = continue_token))
+                r = requests.get(
+                    buildURL(params_new, URL, continue_token=continue_token))
                 res = r.json()
                 pages = res['query']['pages'].keys()
 
-                #Decide whether to continue
+                # Decide whether to continue
                 continue_flag = False
                 if 'continue' in res:
-                    print('Continue Flag Tripped for: ', each_link)
+                    #print('Continue Flag Tripped for: ', each_link)
                     continue_flag = True
                     continue_token = res['continue']['plcontinue']
-                    print(continue_token)
-                    
+                    # print(continue_token)
+
                 try:
 
                     for p in pages:
@@ -105,18 +103,15 @@ def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
                 except Exception as e:
                     print("Could not add links to the page...,", e)
 
-
-                #Decide next state, dependent on continue
+                # Decide next state, dependent on continue
                 if continue_flag:
-                    print('ABOUT TO SEND CONTINUE TOKEN: ', continue_token, 'FOR', each_link)
+                    #print('ABOUT TO SEND CONTINUE TOKEN: ', continue_token, 'FOR', each_link)
                     return internal_second_run(continue_token)
                 else:
                     return None
-        
+
             internal_second_run()
         return None
-
-    
 
     initial_run()
     second_run()
