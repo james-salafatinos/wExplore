@@ -11,7 +11,7 @@ def filter_nodes(G, level=1):
 
         # READ FIRST: <10 means remove anything with a dgree less than 10
         remove = [node for node, degree in dict(
-            G.degree()).items() if degree < 3]
+            G.degree()).items() if degree < 5]
         remove2 = [node for node in G.nodes if '(identifier)' in node]
         G.remove_nodes_from(remove)
         G.remove_nodes_from(remove2)
@@ -48,12 +48,14 @@ def get_page_rank_and_colors(G):
     cmap = cm.get_cmap('winter_r', 12)
 
     node_color_map = {}
+    size_map = {}
     for k, v in dict(color_values_from_PR).items():
         rgba = list(map((lambda x: int(x*255//1)), [*cmap(v)]))
         rgba_str = f'rgb({rgba[0]},{rgba[1]},{rgba[2]})'
         node_color_map[k] = rgba_str
+        size_map[k] = max(1, 1 + np.log1p(v*100))
 
-    return node_color_map
+    return node_color_map, size_map
 
 
 def compute_embeddings(G):
@@ -79,13 +81,13 @@ def compute_embeddings(G):
         verbose=True)
 
     positions = forceatlas2.forceatlas2_networkx_layout(
-        G, pos=None, iterations=200)
+        G, pos=None, iterations=500)
 
     return positions
 
 
-def generate_data(G, pos, color_map):
-    def convert_one_node(label='default', x=0, y=0, _id=0, attributes={}, color="rgb(192,192,192)", size=50):
+def generate_data(G, pos, color_map, size_map):
+    def convert_one_node(label='default', x=0, y=0, _id=0, attributes={}, color="rgb(192,192,192)", size=10):
         _dict = {
             "label": label,
             "x": x,
@@ -93,7 +95,7 @@ def generate_data(G, pos, color_map):
             "id": _id,
             "attributes": attributes,
             "color": color_map[label],
-            "size": size,
+            "size": size_map[label],
         }
 
         return _dict

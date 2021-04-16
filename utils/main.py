@@ -35,18 +35,19 @@ if __name__ == "__main__":
         except Exception as e:
             print("error at generating embeddings...", e)
         try:
-            color_map = get_page_rank_and_colors(G)
+            color_map, size_map = get_page_rank_and_colors(G)
+            print(size_map)
         except Exception as e:
             print("error at generating color map...", e)
         try:
             converted_data_for_sigmajs = generate_data(
-                G, embeddings, color_map)
+                G, embeddings, color_map, size_map)
         except Exception as e:
             print("error at converting for sigmajs..", e)
         # print(converted_data_for_sigmajs)
         try:
             print("Now dumping the JSON!")
-            with open('./src/network/data.json', 'w', encoding = 'utf-8') as f:
+            with open('./src/network/data.json', 'w', encoding='utf-8') as f:
                 json.dump(converted_data_for_sigmajs, f)
         except Exception as e:
             print("error at actually dumping sigmajs the json..", e)
