@@ -4,7 +4,8 @@ import networkx as nx
 from data_generator import filter_nodes, compute_embeddings, generate_data, get_page_rank_and_colors
 import json
 import time
-
+import requests
+base_url = "http://localhost:8080"
 
 print("Hello, in main.py")
 
@@ -47,8 +48,14 @@ if __name__ == "__main__":
         # print(converted_data_for_sigmajs)
         try:
             print("Now dumping the JSON!")
-            with open('./src/network/data.json', 'w', encoding='utf-8') as f:
+            with open('./network/data.json', 'w', encoding='utf-8') as f:
                 json.dump(converted_data_for_sigmajs, f)
+        except Exception as e:
+            print("error at actually dumping sigmajs the json..", e)
+
+        try:
+            print("Now... saving to database!")
+            r = requests.get(base_url+'/api/' + 'add-record')
         except Exception as e:
             print("error at actually dumping sigmajs the json..", e)
 

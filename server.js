@@ -18,7 +18,7 @@ app.set("view engine", "ejs");
 app.get("/", (req, res) => {
   console.log("User entry to site...");
   res.status(200);
-  res.sendFile(__dirname + "/src/network");
+  res.sendFile(__dirname + "/network");
   console.log("User's desired wikipedia page...: ", req.query);
 
   let validate_req = function (req) {
@@ -54,8 +54,8 @@ app.get("/", (req, res) => {
 });
 
 //Express config to enable the model serving of static javascript file
-app.use(express.static(__dirname + "/src/network"));
-app.use(express.static(__dirname + "/src/public/"));
+app.use(express.static(__dirname + "/network"));
+app.use(express.static(__dirname + "/public/"));
 
 //Necessary to utilize db api service
 app.use(bodyParser.json({ limit: "50mb" }));

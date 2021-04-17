@@ -19,7 +19,7 @@ router.get("/", function (req, res) {
 
 router.get("/add-record", (req, res) => {
   const fs = require("fs");
-  fs.readFile("./src/network/data.json", "utf8", (err, jsonString) => {
+  fs.readFile("./network/data.json", "utf8", (err, jsonString) => {
     if (err) {
       console.log("File read failed:", err);
       return;
@@ -49,7 +49,7 @@ router.get("/:uuid", (req, res) => {
       //   res.send(result);
       let payload = result.datasetObject;
       var fs = require("fs");
-      fs.writeFile("./src/network/data.json", payload, function (err) {
+      fs.writeFile("./network/data.json", payload, function (err) {
         if (err) {
           console.log(err);
         }
