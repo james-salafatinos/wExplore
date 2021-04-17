@@ -62,6 +62,10 @@ app.use(bodyParser.json({ limit: "50mb" }));
 //Use body parser to enable handling post requests
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
+//@Route Router for DB & profiles
+let api = require("./routes/api");
+app.use("/api", api);
+
 //Listening with a link
 app.listen(port, () => {
   console.log(`wExplore app listening at http://localhost:${port}`);
