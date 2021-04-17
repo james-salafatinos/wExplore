@@ -24,7 +24,9 @@ router.get("/add-record", (req, res) => {
       console.log("File read failed:", err);
       return;
     }
-    let datasetObject = { datasetObject: jsonString };
+    let title = JSON.parse(jsonString).nodes[0]["label"];
+    console.log("Title submitted to mongo", title);
+    let datasetObject = { title: title, datasetObject: jsonString };
     DatasetObject.create(datasetObject, function (err, result) {
       if (err) {
         console.log(err);
@@ -42,6 +44,7 @@ router.get("/add-record", (req, res) => {
 router.get("/:uuid", (req, res) => {
   //test ID: 607a21fac1d7cd0a3cc8afcb John Church
   //test ID: 607a2a421cdb014db82b7b17 Mark Lowry
+  // Test ID: 607afb255886b52418c867e7 Data Science
   console.log("Requested: ", req.params);
   let uuid = req.params.uuid;
   DatasetObject.findById(uuid)
