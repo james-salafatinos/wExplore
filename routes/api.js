@@ -42,9 +42,7 @@ router.get("/add-record", (req, res) => {
 });
 
 router.get("/:uuid", (req, res) => {
-  //test ID: 607a21fac1d7cd0a3cc8afcb John Church
-  //test ID: 607a2a421cdb014db82b7b17 Mark Lowry
-  // Test ID: 607afb255886b52418c867e7 Data Science
+  //test ID: 607c62e0589b014d6c77f250 Mark Lowry
   console.log("Requested: ", req.params);
   let uuid = req.params.uuid;
   DatasetObject.findById(uuid)
@@ -63,4 +61,47 @@ router.get("/:uuid", (req, res) => {
     .catch((err) => console.log(err));
 });
 
+router.get("/find/all-records-titles", (req, res) => {
+  DatasetObject.find(
+    {},
+    {
+      _id: 1,
+      title: 1,
+    },
+    function (error, data) {
+      // ids is an array of all ObjectIds
+      res.send(data);
+    }
+  );
+});
+
+router.get("/find/by-title/:title", (req, res) => {
+  console.log("Requested title: ", req.params);
+  let title = req.params.uuid;
+  DatasetObject.find(
+    { title: title },
+    {
+      _id: 1,
+      title: 1,
+    },
+    function (error, data) {
+      // ids is an array of all ObjectIds
+      res.send(data);
+    }
+  ).catch((err) => console.log(err));
+});
 module.exports = router;
+
+router.get("/find/:uuid", (req, res) => {
+  //test ID: 607c62e0589b014d6c77f250 Mark Lowry
+  console.log("Requested: ", req.params);
+  let uuid = req.params.uuid;
+  DatasetObject.findById(uuid)
+    .then((result) => {
+      //   res.send(result);
+      let payload = result.datasetObject;
+      res.status(200);
+      res.send(payload);
+    })
+    .catch((err) => console.log(err));
+});

@@ -40,7 +40,12 @@ def get_page_rank_and_colors(G):
         a = a_list
         amin, amax = min(a), max(a)
         for i, val in enumerate(a):
-            a[i] = (val-amin) / (amax-amin)
+            # Avoid division by zero
+            try:
+                a[i] = (val-amin) / (amax-amin)
+            except:
+                a[i] = .5
+                print('Tried to divide by zero')
         return a
 
     color_values_from_PR = normalize(list_of_PR)

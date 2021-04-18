@@ -1,0 +1,78 @@
+const bodyParser = require("body-parser");
+const express = require("express");
+var router = express.Router();
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json({ limit: "10mb" }));
+const dotenv = require("dotenv");
+var path = require("path");
+const DatasetObject = require("../models/datasetObject.model");
+const mongoose = require("mongoose");
+const { spawn } = require("child_process");
+
+var path = require("path");
+const dbURI = process.env.DB_URI;
+mongoose
+  .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then((result) => console.log("Connected to db"))
+  .catch((err) => console.log("Error on connection with mongodb...", err));
+
+//@Route Home Page Route
+router.get("/", (req, res) => {
+  //Test: Machine Learning 607c6a2ed4378255b8a15085
+  console.log("User entry to site...");
+  console.log("User's desired wikipedia page...: ", req.query);
+
+  if (req.query.new_graph) {
+    console.log("In query");
+    //If exists, redirect, otherwise, perform add
+    let title = req.query.new_graph;
+    DatasetObject.find({ title: title }, function (error, data) {
+      //console.log("Found the data..., ", data);
+      if (data.length > 0) {
+        res.status(200);
+        res.redirect("/api/" + data[0]["_id"]);
+      } else {
+        let validate_req = function (req) {
+          if (req.query.new_graph) {
+            check_val = req.query.new_graph;
+            if (check_val.length > 3) {
+              console.log(check_val);
+              return true;
+            } else {
+              return false;
+            }
+          } else {
+            return false;
+          }
+        };
+
+        if (validate_req(req)) {
+          // spawn new child process to call the python script
+          const process = spawn("python", [
+            path.resolve(__dirname, "..", "utils/main.py"),
+            req.query.new_graph,
+          ]);
+
+          // collect data from script
+          process.stdout.on("data", (data) => {
+            console.log(data.toString());
+          });
+
+          // in close event we are sure that stream is from child process is closed
+          process.on("close", (code) => {
+            console.log(`child process close all stdio with code ${code}`);
+            res.redirect("../");
+          });
+        } else {
+          console.log("No python scripts to be run");
+        }
+      }
+    }).catch((err) => console.log(err));
+  } else {
+    console.log("In else");
+    res.status(200);
+    res.sendFile(path.resolve(__dirname + "/../network"));
+  }
+});
+
+module.exports = router;
