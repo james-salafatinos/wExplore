@@ -16,6 +16,24 @@ mongoose
   .then((result) => console.log("Connected to db"))
   .catch((err) => console.log("Error on connection with mongodb...", err));
 
+const wikipedia_scrape = function (wikipedia_topic) {
+  // spawn new child process to call the python script
+  const process = spawn("python", [
+    path.resolve(__dirname, "..", "utils/main.py"),
+    wikipedia_topic,
+  ]);
+
+  // collect data from script
+  process.stdout.on("data", (data) => {
+    console.log(data.toString());
+  });
+
+  // in close event we are sure that stream is from child process is closed
+  process.on("close", (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+  });
+};
+
 //@Route Home Page Route
 router.get("/", (req, res) => {
   //Test: Machine Learning 607c6a2ed4378255b8a15085
@@ -47,24 +65,11 @@ router.get("/", (req, res) => {
         };
 
         if (validate_req(req)) {
-          // spawn new child process to call the python script
-          const process = spawn("python", [
-            path.resolve(__dirname, "..", "utils/main.py"),
-            req.query.new_graph,
-          ]);
+          wikipedia_scrape(req.query.new_graph);
 
-          // collect data from script
-          process.stdout.on("data", (data) => {
-            console.log(data.toString());
-          });
-
-          // in close event we are sure that stream is from child process is closed
-          process.on("close", (code) => {
-            console.log(`child process close all stdio with code ${code}`);
-            res.redirect("../");
-          });
+          res.redirect("../");
         } else {
-          console.log("No python scripts to be run");
+          console.log("No python scripts to be run.");
         }
       }
     }).catch((err) => console.log(err));

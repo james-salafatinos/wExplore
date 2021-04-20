@@ -234,7 +234,7 @@ canvas#sigma_bg_1 {
 }
 
 #mainpanel .col {
-  width: 240px;
+  width: 250px;
   padding: 18px 18px 18px 18px;
   margin: 0;
 }
@@ -254,6 +254,30 @@ canvas#sigma_bg_1 {
 #search {
   border-top: 1px solid #999;
   padding: 20px 0 0px 2px;
+}
+
+#new_graph {
+  border-top: 1px solid #999;
+  padding: 20px 0 0px 2px;
+}
+#new_graph input[name="new_graph"] {
+  border: 1px solid #999;
+  background-color: #fff;
+  padding: 5px 7px 4px 7px;
+  width: 150px;
+  color: #000;
+}
+
+#btn_button {
+  border: 1px solid #999;
+  background-color: rgba(196, 196, 196, 0.623);
+  padding: 5px 7px 4px 7px;
+  width: 60px;
+  color: #000;
+  font-size: 9;
+}
+#btn_button:hover {
+  background: #a5a5a5;
 }
 
 #search input[name="search"] {
