@@ -1,5 +1,6 @@
 import networkx as nx
 from fa2 import ForceAtlas2
+print("In data generator")
 
 
 def filter_nodes(G, level=1):
@@ -80,41 +81,43 @@ def compute_embeddings(G):
         # Tuning
         scalingRatio=5.0,
         strongGravityMode=False,
-        gravity=1,
+        gravity=.5,
 
         # Log
         verbose=True)
 
     positions = forceatlas2.forceatlas2_networkx_layout(
-        G, pos=None, iterations=500)
+        G, pos=None, iterations=100)
 
     return positions
 
 
+def convert_one_node(color_map, size_map, label='default', x=0, y=0, _id=0, attributes={}):
+    _dict = {
+        "label": label,
+        "x": x,
+        "y": y,
+        "id": _id,
+        "attributes": attributes,
+        "color": color_map[label],
+        "size": size_map[label],
+    }
+    return _dict
+
+
+def convert_one_edge(source='default', target='default', _id=0, attributes={}, color="rgb(192,192,192)", size=1):
+    _dict = {
+        "source": source,
+        "target": target,
+        "id": _id,
+        "attributes": attributes,
+        "color": color,
+        "size": size,
+    }
+    return _dict
+
+
 def generate_data(G, pos, color_map, size_map):
-    def convert_one_node(label='default', x=0, y=0, _id=0, attributes={}, color="rgb(192,192,192)", size=10):
-        _dict = {
-            "label": label,
-            "x": x,
-            "y": y,
-            "id": _id,
-            "attributes": attributes,
-            "color": color_map[label],
-            "size": size_map[label],
-        }
-
-        return _dict
-
-    def convert_one_edge(source='default', target='default', _id=0, attributes={}, color="rgb(192,192,192)", size=1):
-        _dict = {
-            "source": source,
-            "target": target,
-            "id": _id,
-            "attributes": attributes,
-            "color": color,
-            "size": size,
-        }
-        return _dict
 
     def convert(G, pos):
         print("in Convert")
@@ -129,7 +132,9 @@ def generate_data(G, pos, color_map, size_map):
             converted_node = convert_one_node(label=node['label'],
                                               x=x,
                                               y=y,
-                                              _id=node['id'])
+                                              _id=node['id'],
+                                              color_map=color_map,
+                                              size_map=size_map)
             nodes.append(converted_node)
         print("After node")
         for edge in json_G['links']:

@@ -17,6 +17,7 @@ mongoose
   .catch((err) => console.log("Error on connection with mongodb...", err));
 
 const wikipedia_scrape = function (wikipedia_topic) {
+  console.log("In Wikipedia scrape function with ", wikipedia_topic);
   // spawn new child process to call the python script
   const process = spawn("python", [
     path.resolve(__dirname, "..", "utils/main.py"),
@@ -45,6 +46,7 @@ router.get("/", (req, res) => {
     //If exists, redirect, otherwise, perform add
     let title = req.query.new_graph;
     DatasetObject.find({ title: title }, function (error, data) {
+      console.log("after dataset object");
       //console.log("Found the data..., ", data);
       if (data.length > 0) {
         res.status(200);
@@ -54,7 +56,7 @@ router.get("/", (req, res) => {
           if (req.query.new_graph) {
             check_val = req.query.new_graph;
             if (check_val.length > 3) {
-              console.log(check_val);
+              console.log("Validated query: ", check_val);
               return true;
             } else {
               return false;
@@ -65,6 +67,7 @@ router.get("/", (req, res) => {
         };
 
         if (validate_req(req)) {
+          console.log("About to Scrape...");
           wikipedia_scrape(req.query.new_graph);
 
           res.redirect("../");

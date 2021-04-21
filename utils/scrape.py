@@ -24,6 +24,7 @@ def buildURL(params, url, continue_token=None):
 def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
     db = {}
     URL = "https://en.wikipedia.org/w/api.php"
+
     params = {
         'action': "query",
         'format': "json",
@@ -63,6 +64,7 @@ def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
             return None
 
     def second_run():
+
         print("Starting second run...")
         for each_link in list(db.values())[0]:
             params_new = {
@@ -76,7 +78,12 @@ def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
             }
 
             def internal_second_run(continue_token=None):
-                print("Starting internal_second_run...")
+
+                try:
+                    print("Starting", "internal_second_run in...",
+                          each_link, "with [", continue_token, "]")
+                except Exception as e:
+                    print("UTF Encoding Error")
                 r = requests.get(
                     buildURL(params_new, URL, continue_token=continue_token))
                 res = r.json()

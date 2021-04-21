@@ -29,6 +29,8 @@ router.get("/add-record", (req, res) => {
     let datasetObject = { title: title, datasetObject: jsonString };
     DatasetObject.create(datasetObject, function (err, result) {
       if (err) {
+        console.log("Could not reach Mongo's DB API");
+        res.send(502);
         console.log(err);
       } else {
         console.log(
@@ -90,7 +92,6 @@ router.get("/find/by-title/:title", (req, res) => {
     }
   ).catch((err) => console.log(err));
 });
-module.exports = router;
 
 router.get("/find/:uuid", (req, res) => {
   //test ID: 607c62e0589b014d6c77f250 Mark Lowry
@@ -105,3 +106,5 @@ router.get("/find/:uuid", (req, res) => {
     })
     .catch((err) => console.log(err));
 });
+
+module.exports = router;

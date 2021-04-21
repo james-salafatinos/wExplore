@@ -63,6 +63,7 @@ function initSigma(config) {
       hoverFontStyle: "bold",
       fontStyle: "bold",
       activeFontStyle: "bold",
+      defaultLabelSize: 50,
     };
 
   if (config.sigma && config.sigma.graphProperties)

@@ -12,11 +12,15 @@
     <title>wExplore</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta charset="utf-8" />
-    <meta
+    <!-- <meta
       name="viewport"
       content="width=device-width,height=device-height,initial-scale=1,user-scalable=no"
-    />
+    /> -->
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=.5, maximum-scale=12.0, minimum-scale=.25, user-scalable=yes"
+    />
 
     <!--[if IE
       ]><script type="text/javascript" src="js/excanvas.js"></script
@@ -81,12 +85,23 @@
           </dl>
           <form>
             <div id="new_graph" class="cf" method="POST">
-              <input
+              <label>Step 1.</label
+              ><input
                 type="text"
                 name="new_graph"
                 value="Enter a Wikipedia Page"
                 class="empty"
+                required
               />
+              <br />
+              <label>Step 2.</label>
+              <!-- <input
+                type="text"
+                name="email"
+                value="Enter your email"
+                class="empty"
+                required
+              /> -->
               <button id="btn_button" type="submit">Submit</button>
             </div>
           </form>
@@ -167,13 +182,13 @@
         $("form").children("input:not(#new_graph)").val("");
       });
     </script>
-    <script>
+    <!-- <script>
       document.getElementById("btn_button").onclick = function () {
         let email = prompt(
           "Please put in your email, as the computation may take a while..."
         );
       };
-    </script>
+    </script> -->
     <script>
       document.getElementById("btn_view_library").onclick = function () {
         $.get(
