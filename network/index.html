@@ -117,7 +117,9 @@
             </div>
           </form>
           <button class="btn" id="btn_view_library">View Graphs</button>
-          <p id="demo"></p>
+          <br />
+          <br />
+          <p id="view_graphs_library"></p>
         </div>
       </div>
       <div id="information"></div>
@@ -224,13 +226,16 @@
                 "api/" +
                 entry._id +
                 ">" +
+                " " +
                 entry.title +
                 "</a>";
 
               console.log(item_to_add);
               list_of_entries.push(item_to_add);
             });
-            document.getElementById("demo").innerHTML = list_of_entries;
+            document.getElementById(
+              "view_graphs_library"
+            ).innerHTML = list_of_entries;
           }
         );
       };
