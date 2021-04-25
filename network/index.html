@@ -77,26 +77,19 @@
       <div class="col">
         <div id="title"></div>
         <div class="info cf">
-          <dl>
-            <dt class="moreinformation"></dt>
-            <dd class="line">
-              <a href="#information" class="line fb">Usage & Instructions</a>
-            </dd>
-          </dl>
           <form id="new_graph_form">
             <div id="new_graph" class="cf" method="POST">
-              <label>Step 1.</label
-              ><input
+              <input
                 type="text"
                 name="new_graph"
                 id="new_graph_search"
                 value="Enter a Wikipedia Page"
-                class="empty"
+                class="empty btn"
                 required
               />
               <br />
-              <label>Step 2.</label>
-              <button id="btn_button" type="button">Submit</button>
+              <br />
+              <button class="btn" id="btn_button" type="button">Submit</button>
             </div>
           </form>
           <br />
@@ -107,7 +100,7 @@
         <div class="b1">
           <form>
             <div id="search" class="cf">
-              <h2>Search:</h2>
+              <!-- <h2>Search:</h2>
               <input
                 type="text"
                 name="search"
@@ -115,7 +108,7 @@
                 class="empty"
               />
               <div class="state"></div>
-              <div class="results"></div>
+              <div class="results"></div> -->
             </div>
             <div class="cf" id="attributeselect">
               <h2>Group Selector:</h2>
@@ -123,7 +116,7 @@
               <div class="list cf"></div>
             </div>
           </form>
-          <button id="btn_view_library">View Graphs</button>
+          <button class="btn" id="btn_view_library">View Graphs</button>
           <p id="demo"></p>
         </div>
       </div>
@@ -143,7 +136,7 @@
           <span>Information Pane</span>
         </div>
         <div class="nodeattributes">
-          <button id="to_wikipedia">Open Wikipedia Page In a New Tab</button>
+          <button class="btn" id="to_wikipedia">Go To Wikipedia Page</button>
 
           <div class="name"></div>
           <div class="data"></div>

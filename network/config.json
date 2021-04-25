@@ -10,7 +10,7 @@
   "text": {
     "more": "Test Graph",
     "intro": "Test Graph",
-    "title": "wExplore: The wikipedia network exploration tool"
+    "title": "<h1>wExplore:</h1> <br> The Wikipedia network exploration tool"
   },
   "legend": {
     "edgeLabel": "Test",
@@ -32,7 +32,7 @@
       "defaultHoverLabelBGColor": "#002147",
       "defaultLabelBGColor": "#ddd",
       "activeFontStyle": "bold",
-      "defaultLabelColor": "#f5f5f5",
+      "defaultLabelColor": "#141517",
       "labelThreshold": 12,
       "defaultLabelHoverColor": "#fff",
       "fontStyle": "bold",

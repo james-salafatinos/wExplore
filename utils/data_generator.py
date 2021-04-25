@@ -80,9 +80,9 @@ def compute_embeddings(G):
         multiThreaded=False,  # NOT IMPLEMENTED
 
         # Tuning
-        scalingRatio=5.0,
+        scalingRatio=7.0,
         strongGravityMode=False,
-        gravity=.5,
+        gravity=.2,
 
         # Log
         verbose=True)

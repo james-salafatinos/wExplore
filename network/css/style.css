@@ -28,6 +28,23 @@ body {
   line-height: 1.25em;
 }
 
+.btn {
+  border-radius: 4px;
+  box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25),
+    -8px -8px 12px 0 rgba(255, 255, 255, 0.3);
+  margin: auto;
+  border: 1px solid rgba(226, 247, 255, 0);
+  background-color: rgb(226, 247, 255);
+  padding: 5px 7px 4px 7px;
+  width: 100px;
+  color: #000;
+  font-size: 9;
+  background-image: url(backgroundpic.jpg);
+  background-size: 400px;
+}
+.btn:hover {
+  background: #a5a5a5;
+}
 .sigma-parent {
   position: relative;
   height: 100%;
@@ -39,7 +56,7 @@ body {
   height: 100%;
   top: 0;
   left: 0;
-  background-color: rgb(44, 44, 44);
+  background-color: rgb(255, 255, 255);
   background-position: center center;
   background-repeat: no-repeat;
   -webkit-touch-callout: none;
@@ -70,6 +87,9 @@ canvas#sigma_bg_1 {
   border-left: 1px solid #ccc;
   padding: 0px 18px 0px 18px;
   z-index: 1;
+  background-image: url(backgroundpic_rotated.jpg);
+
+  padding-bottom: 5px;
 }
 
 #attributepane .text {
@@ -227,6 +247,8 @@ canvas#sigma_bg_1 {
   z-index: 20;
   position: fixed;
   top: 0;
+  background-image: url(backgroundpic.jpg);
+  padding-bottom: 5px;
 }
 
 #mainpanel .b1 {
@@ -261,10 +283,9 @@ canvas#sigma_bg_1 {
   padding: 20px 0 0px 2px;
 }
 #new_graph input[name="new_graph"] {
-  border: 1px solid #999;
   background-color: #fff;
   padding: 5px 7px 4px 7px;
-  width: 150px;
+  width: 200px;
   color: #000;
 }
 
@@ -274,18 +295,6 @@ canvas#sigma_bg_1 {
   padding: 5px 7px 4px 7px;
   width: 150px;
   color: #000;
-}
-
-#btn_button {
-  border: 1px solid #999;
-  background-color: rgba(196, 196, 196, 0.623);
-  padding: 5px 7px 4px 7px;
-  width: 60px;
-  color: #000;
-  font-size: 9;
-}
-#btn_button:hover {
-  background: #a5a5a5;
 }
 
 #search input[name="search"] {
