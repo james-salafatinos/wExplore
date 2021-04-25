@@ -1,5 +1,7 @@
-runtime: python36
+runtime: python
+# vm: true has been deprecated
+# check how env:flex may affect your billing
 env: flex
-automatic_scaling:
-  min_num_instances: 1
-  max_num_instances: 2
+
+runtime_config:
+    python_version: 3

@@ -25,6 +25,7 @@ utils/.ipynb_checkpoints
 /dist
 /tmp
 /out-tsc
+/.vscode/
 
 # Runtime data
 pids
