@@ -6,6 +6,7 @@ import json
 import time
 import requests
 base_url = "http://localhost:8080"
+print("Hello, in main.py")
 
 if __name__ == "__main__":
     print("Hello, starting up the python engine in main.py")

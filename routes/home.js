@@ -18,6 +18,10 @@ mongoose
 
 const wikipedia_scrape = function (wikipedia_topic) {
   console.log("In Wikipedia scrape function with ", wikipedia_topic);
+  console.log(
+    "Wikipedia Scrape path",
+    path.resolve(__dirname, "..", "utils/main.py")
+  );
   // spawn new child process to call the python script
   const process = spawn("python", [
     path.resolve(__dirname, "..", "utils/main.py"),
