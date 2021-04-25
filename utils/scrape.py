@@ -36,10 +36,12 @@ def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
     }
 
     def initial_run(continue_token=None):
+        print("Starting initial run...")
         # Request
         r = requests.get(buildURL(params, URL, continue_token=continue_token))
         res = r.json()
         pages = res['query']['pages'].keys()
+        print("Pages: ", pages)
 
         # Decide whether to continue
         continue_flag = False
@@ -66,7 +68,8 @@ def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
     def second_run():
 
         print("Starting second run...")
-        for each_link in list(db.values())[0]:
+        br = False
+        for i, each_link in enumerate(list(db.values())[0]):
             params_new = {
                 'action': "query",
                 'format': "json",
@@ -77,11 +80,15 @@ def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
                 'ascii': 2,
             }
 
-            def internal_second_run(continue_token=None):
+            # Safety
+            if br:
+                break
 
+            def internal_second_run(continue_token=None):
                 try:
-                    print("Starting", "internal_second_run in...",
-                          each_link, "with [", continue_token, "]")
+                    if i % 10 == 0:
+                        print(f'Link Counter at: {i} on {each_link}')
+
                 except Exception as e:
                     print("UTF Encoding Error")
                 r = requests.get(
@@ -92,7 +99,7 @@ def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
                 # Decide whether to continue
                 continue_flag = False
                 if 'continue' in res:
-                    #print('Continue Flag Tripped for: ', each_link)
+                    # print('Continue Flag Tripped for: ', each_link)
                     continue_flag = True
                     continue_token = res['continue']['plcontinue']
                     # print(continue_token)
@@ -106,18 +113,25 @@ def getData(start_link, first_leaf_limit, second_leaf_limit, output_location):
 
                         links = res['query']['pages'][p]['links']
                         for l in links:
-                            db[page_title].append(l['title'])
+                            if page_title != start_link:
+                                db[page_title].append(l['title'])
                 except Exception as e:
                     print("Could not add links to the page...,", e)
 
                 # Decide next state, dependent on continue
                 if continue_flag:
-                    #print('ABOUT TO SEND CONTINUE TOKEN: ', continue_token, 'FOR', each_link)
+                    # print('ABOUT TO SEND CONTINUE TOKEN: ', continue_token, 'FOR', each_link)
                     return internal_second_run(continue_token)
                 else:
                     return None
 
             internal_second_run()
+
+            # Safety Check
+            if i > len(list(db.values())[0]):
+                print("SHOULD BE BREAKING NOW", i)
+                br = True
+                return None
         return None
 
     initial_run()

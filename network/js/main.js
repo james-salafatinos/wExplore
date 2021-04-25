@@ -58,7 +58,7 @@ function initSigma(config) {
       defaultLabelBGColor: "#ddd",
       defaultHoverLabelBGColor: "#002147",
       defaultLabelHoverColor: "#fff",
-      labelThreshold: 10,
+      labelThreshold: 12,
       defaultEdgeType: "curve",
       hoverFontStyle: "bold",
       fontStyle: "bold",
@@ -305,7 +305,7 @@ function configSigmaElements(config) {
         sigInst.clusters[b].length +
         " members)</a></div>"
     );
-  //a.sort();f
+
   $GP.cluster.content(a.join(""));
   b = {
     minWidth: 400,
@@ -582,10 +582,7 @@ function nodeActive(a) {
     d = "";
     for (g in e) {
       c = e[g];
-      /*if (c.group != d) {
-				d = c.group;
-				f.push('<li class="cf" rel="' + c.color + '"><div class=""></div><div class="">' + d + "</div></li>");
-			}*/
+
       f.push(
         '<li class="membership"><a href="#' +
           c.name +
@@ -601,17 +598,7 @@ function nodeActive(a) {
     return f;
   };
 
-  /*console.log("mutual:");
-	console.log(mutual);
-	console.log("incoming:");
-	console.log(incoming);
-	console.log("outgoing:");
-	console.log(outgoing);*/
-
   var f = [];
-
-  //console.log("neighbors:");
-  //console.log(sigInst.neighbors);
 
   if (groupByDirection) {
     size = Object.size(mutual);

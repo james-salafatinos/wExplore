@@ -1,10 +1,12 @@
 import networkx as nx
 from fa2 import ForceAtlas2
-print("In data generator")
+import pandas as pd
+from matplotlib import cm
+import numpy as np
 
 
 def filter_nodes(G, level=1):
-    print('In filter nodes....')
+    print('Starting to filter nodes....')
 
     if level == 0:
         return G
@@ -29,9 +31,7 @@ def get_page_rank_and_colors(G):
 
     Page rank will always add up to 1 for the entire array.
     """
-    import pandas as pd
-    from matplotlib import cm
-    import numpy as np
+    print('Getting node color and size maps....')
 
     PR = nx.algorithms.link_analysis.pagerank_alg.pagerank(G)
     #cum_sum_page_rank = np.cumsum(pd.Series(PR).sort_values())
@@ -65,6 +65,7 @@ def get_page_rank_and_colors(G):
 
 
 def compute_embeddings(G):
+    print('Computting embeddings...')
     forceatlas2 = ForceAtlas2(
         # Behavior alternatives
         outboundAttractionDistribution=False,  # Dissuade hubs
@@ -118,12 +119,11 @@ def convert_one_edge(source='default', target='default', _id=0, attributes={}, c
 
 
 def generate_data(G, pos, color_map, size_map):
+    print('Writing Data to Json...')
 
     def convert(G, pos):
-        print("in Convert")
         from networkx.readwrite import json_graph
         json_G = json_graph.node_link_data(G)
-        print("After node_link_data")
 
         nodes = []
         edges = []
@@ -136,7 +136,6 @@ def generate_data(G, pos, color_map, size_map):
                                               color_map=color_map,
                                               size_map=size_map)
             nodes.append(converted_node)
-        print("After node")
         for edge in json_G['links']:
             converted_edge = convert_one_edge(source=edge['source'],
                                               target=edge['target'],

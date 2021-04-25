@@ -83,26 +83,20 @@
               <a href="#information" class="line fb">Usage & Instructions</a>
             </dd>
           </dl>
-          <form>
+          <form id="new_graph_form">
             <div id="new_graph" class="cf" method="POST">
               <label>Step 1.</label
               ><input
                 type="text"
                 name="new_graph"
+                id="new_graph_search"
                 value="Enter a Wikipedia Page"
                 class="empty"
                 required
               />
               <br />
               <label>Step 2.</label>
-              <!-- <input
-                type="text"
-                name="email"
-                value="Enter your email"
-                class="empty"
-                required
-              /> -->
-              <button id="btn_button" type="submit">Submit</button>
+              <button id="btn_button" type="button">Submit</button>
             </div>
           </form>
           <br />
@@ -149,6 +143,8 @@
           <span>Information Pane</span>
         </div>
         <div class="nodeattributes">
+          <button id="to_wikipedia">Open Wikipedia Page In a New Tab</button>
+
           <div class="name"></div>
           <div class="data"></div>
           <div class="p">Connections:</div>
@@ -158,37 +154,70 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(["_setAccount", "UA-21293169-4"]);
-      _gaq.push(["_setDomainName", "none"]);
-      _gaq.push(["_setAllowLinker", true]);
-      _gaq.push(["_trackPageview"]);
 
-      (function () {
-        var ga = document.createElement("script");
-        ga.type = "text/javascript";
-        ga.async = true;
-        ga.src =
-          ("https:" == document.location.protocol
-            ? "https://ssl"
-            : "http://www") + ".google-analytics.com/ga.js";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
     <script>
       $(window).load(function () {
         $("form").children("input:not(#new_graph)").val("");
       });
     </script>
-    <!-- <script>
-      document.getElementById("btn_button").onclick = function () {
-        let email = prompt(
-          "Please put in your email, as the computation may take a while..."
-        );
+    <script>
+      window.validate = function () {
+        let search = document.getElementById("new_graph_search").value;
+        let url = `https://en.wikipedia.org/w/api.php?origin=*&action=query&format=json&titles=${search}&prop=links&pllimit=500&plnamespace=0&ascii=2`;
+
+        $.get(url, function (data, error) {
+          console.log("DATA", data);
+          console.log(data.query.pages);
+          let pages = data.query.pages;
+          let page_id = Object.keys(pages)[0];
+          let specific_page = pages[page_id];
+          let num_of_links = 0;
+          try {
+            num_of_links = specific_page.links.length;
+            if (num_of_links > 4) {
+              alert(
+                "Thanks for the submission! " +
+                  "The graph you are requesting has:  " +
+                  num_of_links +
+                  " starting links.\n\n" +
+                  "Generating the network takes some time because of all the Wikipedia API calls. " +
+                  "Please come back to the site after 2-25 minutes depending on how big your graph is.\n\n" +
+                  "**Hint** Very specific topics typically produce good results. Try something like 'John Henry Pepper'."
+              );
+              $("#new_graph_form").submit();
+            } else {
+              let present_options = function (page_array) {
+                cube = [];
+                page_array.forEach((p) => {
+                  cube.push(p.title);
+                });
+                return cube;
+              };
+              alert(
+                "Sorry, thats not a valid wikipedia page... it's case sensitive, be exact!" +
+                  "\n\n Maybe try one of these: " +
+                  JSON.stringify(present_options(specific_page.links))
+              );
+            }
+          } catch {
+            alert(
+              "Sorry, thats not a valid wikipedia page... it's case sensitive, be exact!" +
+                "\n\n Try searching on https://wikipedia.org/ and copying the exact title."
+            );
+          }
+        });
       };
-    </script> -->
+    </script>
+    <script>
+      $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+          event.preventDefault();
+          document.getElementById("btn_button").click();
+          return false;
+        }
+      });
+    </script>
+
     <script>
       document.getElementById("btn_view_library").onclick = function () {
         $.get(
@@ -211,6 +240,19 @@
             document.getElementById("demo").innerHTML = list_of_entries;
           }
         );
+      };
+    </script>
+
+    <script>
+      document.getElementById("btn_button").onclick = function () {
+        validate();
+      };
+    </script>
+    <script>
+      document.getElementById("to_wikipedia").onclick = function () {
+        let url = "http://wikipedia.org/wiki/";
+        let item = window.location.href.split("#")[1];
+        window.open(url + item);
       };
     </script>
   </body>

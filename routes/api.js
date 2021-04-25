@@ -3,7 +3,7 @@ const express = require("express");
 var router = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json({ limit: "10mb" }));
-const dotenv = require("dotenv");
+const dotenv = require("dotenv").config();
 var path = require("path");
 const DatasetObject = require("../models/datasetObject.model");
 const mongoose = require("mongoose");
@@ -30,7 +30,7 @@ router.get("/add-record", (req, res) => {
     DatasetObject.create(datasetObject, function (err, result) {
       if (err) {
         console.log("Could not reach Mongo's DB API");
-        res.send(502);
+        res.status(502);
         console.log(err);
       } else {
         console.log(
@@ -79,7 +79,7 @@ router.get("/find/all-records-titles", (req, res) => {
 
 router.get("/find/by-title/:title", (req, res) => {
   console.log("Requested title: ", req.params);
-  let title = req.params.uuid;
+  let title = req.params.title;
   DatasetObject.find(
     { title: title },
     {
@@ -87,6 +87,7 @@ router.get("/find/by-title/:title", (req, res) => {
       title: 1,
     },
     function (error, data) {
+      res.status(200);
       // ids is an array of all ObjectIds
       res.send(data);
     }
