@@ -3,15 +3,24 @@ const express = require("express");
 var router = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json({ limit: "10mb" }));
-const dotenv = require("dotenv");
+const dotenv = require("dotenv").config();
 var path = require("path");
 const DatasetObject = require("../models/datasetObject.model");
 const mongoose = require("mongoose");
 const { spawn } = require("child_process");
 const fs = require("fs");
-
 var path = require("path");
 const dbURI = process.env.DB_URI;
+const environment = process.env.ENVIRONMENT;
+console.log(environment);
+//Figures out environment
+let python_path = "/usr/local/bin/python3";
+if (environment == "DEV") {
+  python_path = "python";
+} else {
+  python_path = "/usr/local/bin/python3";
+}
+
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => console.log("Connected to db"))
@@ -19,16 +28,16 @@ mongoose
 
 const wikipedia_scrape = function (wikipedia_topic) {
   console.log("In Wikipedia scrape function with ", wikipedia_topic);
+
   console.log(
     "Wikipedia Scrape path",
     path.resolve(__dirname, "..", "utils/main.py")
   );
   // spawn new child process to call the python script
-  const process = spawn("/usr/local/bin/python3", [
+  const process = spawn(python_path, [
     path.resolve(__dirname, "..", "utils/main.py"),
     wikipedia_topic,
   ]);
-  console.log("Process:", process)
 
   // collect data from script
   process.stdout.on("data", (data) => {
@@ -39,34 +48,27 @@ const wikipedia_scrape = function (wikipedia_topic) {
   process.on("close", (code) => {
     console.log(`child process close all stdio with code ${code}`);
 
-    if (code == 0){
-        fs.readFile("./network/data.json", "utf8", (err, jsonString) => {
-            if (err) {
-            console.log("File read failed:", err);
-            return;
-            }
-            let title = JSON.parse(jsonString).nodes[0]["label"];
-            console.log("Title submitted to mongo", title);
-            let datasetObject = { title: title, datasetObject: jsonString };
-            DatasetObject.create(datasetObject, function (err, result) {
-            if (err) {
-                console.log("Could not reach Mongo's DB API");
-                console.log(err);
-            } else {
-                console.log(
-                `Saved payload to MongoDB with _id: ${JSON.stringify(result._id)}`
-                );
-            }
-            });
+    if (code == 0) {
+      fs.readFile("./network/data.json", "utf8", (err, jsonString) => {
+        if (err) {
+          console.log("File read failed:", err);
+          return;
+        }
+        let title = JSON.parse(jsonString).nodes[0]["label"];
+        console.log("Title submitted to mongo", title);
+        let datasetObject = { title: title, datasetObject: jsonString };
+        DatasetObject.create(datasetObject, function (err, result) {
+          if (err) {
+            console.log("Could not reach Mongo's DB API");
+            console.log(err);
+          } else {
+            console.log(
+              `Saved payload to MongoDB with _id: ${JSON.stringify(result._id)}`
+            );
+          }
         });
-
-
-
+      });
     }
-
-
-
-
   });
 };
 

@@ -33,5 +33,5 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 //Listening with a link
 app.listen(port, () => {
-  console.log(`wExplore app listening at http://localhost:${port}`);
+  console.log(`wExplore app listening at http://localhost:${port}/`);
 });

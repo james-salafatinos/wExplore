@@ -5,7 +5,8 @@ from data_generator import filter_nodes, compute_embeddings, generate_data, get_
 import json
 import time
 import requests
-#base_url = "https://8080-cs-291019621083-default.cs-us-central1-mtyn.cloudshell.dev"
+
+#base_url = "https://localhost:8080"
 base_url = "https://wexplore-311823.uc.r.appspot.com"
 print("Hello, in main.py")
 
