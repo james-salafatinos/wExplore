@@ -8,6 +8,7 @@ var path = require("path");
 const DatasetObject = require("../models/datasetObject.model");
 const mongoose = require("mongoose");
 const { spawn } = require("child_process");
+const fs = require("fs");
 
 var path = require("path");
 const dbURI = process.env.DB_URI;
@@ -23,10 +24,11 @@ const wikipedia_scrape = function (wikipedia_topic) {
     path.resolve(__dirname, "..", "utils/main.py")
   );
   // spawn new child process to call the python script
-  const process = spawn("python", [
+  const process = spawn("/usr/local/bin/python3", [
     path.resolve(__dirname, "..", "utils/main.py"),
     wikipedia_topic,
   ]);
+  console.log("Process:", process)
 
   // collect data from script
   process.stdout.on("data", (data) => {
@@ -36,6 +38,35 @@ const wikipedia_scrape = function (wikipedia_topic) {
   // in close event we are sure that stream is from child process is closed
   process.on("close", (code) => {
     console.log(`child process close all stdio with code ${code}`);
+
+    if (code == 0){
+        fs.readFile("./network/data.json", "utf8", (err, jsonString) => {
+            if (err) {
+            console.log("File read failed:", err);
+            return;
+            }
+            let title = JSON.parse(jsonString).nodes[0]["label"];
+            console.log("Title submitted to mongo", title);
+            let datasetObject = { title: title, datasetObject: jsonString };
+            DatasetObject.create(datasetObject, function (err, result) {
+            if (err) {
+                console.log("Could not reach Mongo's DB API");
+                console.log(err);
+            } else {
+                console.log(
+                `Saved payload to MongoDB with _id: ${JSON.stringify(result._id)}`
+                );
+            }
+            });
+        });
+
+
+
+    }
+
+
+
+
   });
 };
 

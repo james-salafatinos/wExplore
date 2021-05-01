@@ -5,7 +5,8 @@ from data_generator import filter_nodes, compute_embeddings, generate_data, get_
 import json
 import time
 import requests
-base_url = "http://localhost:8080"
+#base_url = "https://8080-cs-291019621083-default.cs-us-central1-mtyn.cloudshell.dev"
+base_url = "https://wexplore-311823.uc.r.appspot.com"
 print("Hello, in main.py")
 
 if __name__ == "__main__":
@@ -101,7 +102,9 @@ if __name__ == "__main__":
     if json_written_locally and not pull_the_plug:
         try:
             print("7. Trying send GET request to the add-record API endpoint...")
+            print('Attempting with: ', base_url+'/api/' + 'add-record')
             r = requests.get(base_url+'/api/' + 'add-record')
+            print(r)
             print("[x] SUCCESS")
             success_log['7. Trying send GET request to the add-record API endpoint...'] = 'SUCCESS'
         except Exception as e:
