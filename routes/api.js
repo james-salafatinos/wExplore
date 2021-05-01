@@ -1,10 +1,14 @@
 const bodyParser = require("body-parser");
 const express = require("express");
+
 var router = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json({ limit: "10mb" }));
+
 const dotenv = require("dotenv").config();
 var path = require("path");
+
+//Database setup
 const DatasetObject = require("../models/datasetObject.model");
 const mongoose = require("mongoose");
 const dbURI = process.env.DB_URI;
@@ -14,9 +18,18 @@ mongoose
   .catch((err) => console.log("Error on connection with mongodb...", err));
 
 router.get("/", function (req, res) {
-  res.status(200).send("Youve reached the API");
+  let info = [];
+
+  //Collects all the route names and presents it
+  router.stack.forEach(function (r) {
+    if (r.route && r.route.path) {
+      info.push(r.route.path);
+    }
+  });
+  res.status(200).send(info);
 });
 
+//Add the current data.json to mongo
 router.get("/add-record", (req, res) => {
   const fs = require("fs");
   fs.readFile("./network/data.json", "utf8", (err, jsonString) => {
@@ -43,6 +56,7 @@ router.get("/add-record", (req, res) => {
   });
 });
 
+//Go to graph by uuid
 router.get("/:uuid", (req, res) => {
   //test ID: 607c62e0589b014d6c77f250 Mark Lowry
   console.log("Requested: ", req.params);
@@ -63,6 +77,7 @@ router.get("/:uuid", (req, res) => {
     .catch((err) => console.log(err));
 });
 
+//Present all titles in the database
 router.get("/find/all-records-titles", (req, res) => {
   DatasetObject.find(
     {},

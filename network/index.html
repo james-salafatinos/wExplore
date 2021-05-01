@@ -77,6 +77,8 @@
       <div class="col">
         <div id="title"></div>
         <div class="info cf">
+          <br />
+
           <form id="new_graph_form">
             <div id="new_graph" class="cf" method="POST">
               <input
@@ -92,8 +94,10 @@
               <button class="btn" id="btn_button" type="button">Submit</button>
             </div>
           </form>
+
           <br />
         </div>
+
         <div id="legend">
           <div class="box"></div>
         </div>
@@ -116,6 +120,9 @@
               <div class="list cf"></div>
             </div>
           </form>
+          <h4 style="text-align: left">Currently Viewing:</h4>
+          <h5 style="text-align: left" id="title-name">...</h5>
+          <br />
           <button class="btn" id="btn_view_library">View Graphs</button>
           <br />
           <br />
@@ -252,6 +259,13 @@
         let item = window.location.href.split("#")[1];
         window.open(url + item);
       };
+    </script>
+    <script>
+      $.getJSON("data.json", function (data) {
+        title_node = data.nodes[0];
+        title = title_node.label;
+        document.getElementById("title-name").innerText = title;
+      });
     </script>
   </body>
 </html>
