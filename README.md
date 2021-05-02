@@ -6,13 +6,15 @@
 
 ## 🚀 Demo
 
+![](img/wExplore.gif)
+![](img/wExplore-view.gif)
+
 ## 💥 Usage
 
 View:
 
 - Navigate in your browser (desktop only!)
 - Click "View Graphs" to see what others have researched.
-  -pic-
 
 Create:
 
@@ -32,7 +34,7 @@ Access:
 - Hands-free Wikipedia scraping
 - Easy API
 
-## 🛠️ Installation Steps
+## 🛠️ Local Installation Steps
 
 1. Clone the repository
 
@@ -50,10 +52,11 @@ cd wExplore
 
 ```bash
 npm install
-pip install pandas numpy fa2 networkx
+pip install pandas numpy fa2 networkx requests Cython matplotlib
 ```
 
-**Virtual environment will not work because of `fa2` requires C++ Build tools**
+**NOTE you must have Microsoft Visual Studio Build Tools installed for `fa2`**
+https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019
 
 4. Run the app
 
@@ -69,12 +72,32 @@ npm start
 
 🌟 You are all set!
 
-## 🍰 Contributing
+## 🛠️ Cloud Deployment (GCP)
+
+1. Clone the repository via the Cloud Shell
+
+```bash
+git clone https://github.com/james-salafatinos/wExplore.git
+cd wExplore
+```
+
+2. Create a `.env` file
+
+- Give `DB_URI` and `ENVIRONMENT` variables
+
+3. Deploy
+
+```
+gcloud app deploy
+```
+
+Google App Engine will first look at the `app.yaml` file and see that this is a custom runtime. It will then use the `Dockerfile` to create a container to deploy to a Google managed VM.
+The Docker file specifies the environment for this application to run (python [including C++ build tools] and node.js.
 
 ## 💻 Built with
 
-- [OII Network Visualization](https://github.com/oxfordinternetinstitute/InteractiveVis/): for network config
-- [Sigma.js] for network renderer
+- [OII Network Visualization](https://github.com/oxfordinternetinstitute/InteractiveVis/)
+- [Sigma.js]
 - [MongoDB]
 - [Node.js]
 - [Express.js]
@@ -101,7 +124,3 @@ npm start
 ## Thoughts
 
 - [ ] Can reduce file storage size by offloading the data.json construction (color_map, size_map, data.json) to the client. Then can store flat files of |source|target|force atlas embedding|.
-
-```
-
-```
