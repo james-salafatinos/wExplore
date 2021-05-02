@@ -6,7 +6,6 @@
 
 ## 🚀 Demo
 
-![](img/wExplore.gif)
 ![](img/wExplore-view.gif)
 
 ## 💥 Usage
