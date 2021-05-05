@@ -9,7 +9,14 @@ const { spawn } = require("child_process");
 //Required for environment variables
 require("dotenv").config();
 
-// here you set that all templates are located in `/views` directory
+//Database setup
+
+const mongoose = require("mongoose");
+const dbURI = process.env.DB_URI;
+mongoose
+  .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then((result) => console.log("Connected to db"))
+  .catch((err) => console.log("Error on connection with mongodb...", err));
 
 //Express config for enabling templating engine to serve html
 app.set("view engine", "ejs");

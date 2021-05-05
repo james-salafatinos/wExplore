@@ -1,26 +1,15 @@
 const bodyParser = require("body-parser");
 const express = require("express");
-
+const fs = require("fs");
 var router = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json({ limit: "10mb" }));
 
-const dotenv = require("dotenv").config();
-var path = require("path");
-
-//Database setup
 const DatasetObject = require("../models/datasetObject.model");
-const mongoose = require("mongoose");
-const dbURI = process.env.DB_URI;
-mongoose
-  .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then((result) => console.log("Connected to db"))
-  .catch((err) => console.log("Error on connection with mongodb...", err));
 
 router.get("/", function (req, res) {
-  let info = [];
-
   //Collects all the route names and presents it
+  let info = [];
   router.stack.forEach(function (r) {
     if (r.route && r.route.path) {
       info.push(r.route.path);
@@ -31,7 +20,6 @@ router.get("/", function (req, res) {
 
 //Add the current data.json to mongo
 router.get("/add-record", (req, res) => {
-  const fs = require("fs");
   fs.readFile("./network/data.json", "utf8", (err, jsonString) => {
     if (err) {
       console.log("File read failed:", err);
@@ -50,7 +38,8 @@ router.get("/add-record", (req, res) => {
           `Saved payload to MongoDB with _id: ${JSON.stringify(result._id)}`
         );
         //This sends a notification back to the CLIENT that the database load was successful!
-        res.redirect(`/api/${result._id}`);
+        // res.redirect(`/api/${result._id}`);
+        res.send("200");
       }
     });
   });
@@ -58,7 +47,6 @@ router.get("/add-record", (req, res) => {
 
 //Go to graph by uuid
 router.get("/:uuid", (req, res) => {
-  //test ID: 607c62e0589b014d6c77f250 Mark Lowry
   console.log("Requested: ", req.params);
   let uuid = req.params.uuid;
   DatasetObject.findById(uuid)
@@ -72,7 +60,8 @@ router.get("/:uuid", (req, res) => {
         }
       });
       res.status(200);
-      res.redirect("../");
+      // res.redirect("../");
+      res.redirect("back");
     })
     .catch((err) => console.log(err));
 });

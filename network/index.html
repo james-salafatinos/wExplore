@@ -175,13 +175,13 @@
             num_of_links = specific_page.links.length;
             if (num_of_links > 4) {
               alert(
-                "Thanks for the submission! " +
+                "Your graph will now be generated...!\n " +
                   "The graph you are requesting has:  " +
                   num_of_links +
                   " starting links.\n\n" +
-                  "Generating the network takes some time because of all the Wikipedia API calls. " +
-                  "Please come back to the site after 2-25 minutes depending on how big your graph is.\n\n" +
-                  "**Hint** Very specific topics typically produce good results. Try something like 'John Henry Pepper'."
+                  "Generating the network takes 2-25 minutes because of all the Wikipedia API calls. " +
+                  "Please come back to the site later and check the 'View Graphs' section.\n\n" +
+                  "**Hint** 500 starting links is the maximum. ~250 starting links produces good results."
               );
               $("#new_graph_form").submit();
             } else {
@@ -220,7 +220,7 @@
     <script>
       document.getElementById("btn_view_library").onclick = function () {
         $.get(
-          window.location.href.split("#")[0] + "api/find/all-records-titles",
+          window.location.href.split(/[?#]/)[0] + "api/find/all-records-titles",
           function (data) {
             let list_of_entries = [];
             data.forEach((entry) => {

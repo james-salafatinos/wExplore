@@ -5,6 +5,19 @@ from matplotlib import cm
 import numpy as np
 
 
+def normalize(a_list):
+    a = a_list
+    amin, amax = min(a), max(a)
+    for i, val in enumerate(a):
+        # Avoid division by zero
+        try:
+            a[i] = (val-amin) / (amax-amin)
+        except:
+            a[i] = .1
+            print('Tried to divide by zero')
+    return a
+
+
 def filter_nodes(G, level=1):
     print('Starting to filter nodes....')
 
@@ -36,18 +49,6 @@ def get_page_rank_and_colors(G):
     PR = nx.algorithms.link_analysis.pagerank_alg.pagerank(G)
     #cum_sum_page_rank = np.cumsum(pd.Series(PR).sort_values())
     list_of_PR = pd.Series(PR).sort_values()
-
-    def normalize(a_list):
-        a = a_list
-        amin, amax = min(a), max(a)
-        for i, val in enumerate(a):
-            # Avoid division by zero
-            try:
-                a[i] = (val-amin) / (amax-amin)
-            except:
-                a[i] = .5
-                print('Tried to divide by zero')
-        return a
 
     color_values_from_PR = normalize(list_of_PR)
 

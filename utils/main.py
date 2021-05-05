@@ -5,10 +5,23 @@ from data_generator import filter_nodes, compute_embeddings, generate_data, get_
 import json
 import time
 import requests
+import os
 
-#base_url = "https://localhost:8080"
-base_url = "https://wexplore-311823.uc.r.appspot.com"
-print("Hello, in main.py")
+env = os.environ.get("ENVIRONMENT")
+if(env == "DEV"):
+    base_url = "http://localhost:8080"
+else:
+    base_url = "http://wexplore-311823.uc.r.appspot.com"
+
+print("""
+
+
+#####################################################
+##########                                 ##########
+##########    Starting Python Scrape       ##########
+##########                                 ##########
+#####################################################
+""")
 
 if __name__ == "__main__":
     print("Hello, starting up the python engine in main.py")
