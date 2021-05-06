@@ -63,7 +63,7 @@ function initSigma(config) {
       hoverFontStyle: "bold",
       fontStyle: "bold",
       activeFontStyle: "bold",
-      defaultLabelSize: 50,
+      defaultLabelSize: 12,
     };
 
   if (config.sigma && config.sigma.graphProperties)
@@ -154,6 +154,7 @@ function setupGUI(config) {
 
   // Node
   if (config.legend.nodeLabel) {
+    // console.log("Node config. ", config.legend);
     $(".node").next().html(config.legend.nodeLabel);
   } else {
     //hide more information link
@@ -495,6 +496,7 @@ function nodeNormal() {
       a.hidden = !1;
       a.attr.color = !1;
       a.attr.lineWidth = !1;
+
       a.attr.size = !1;
     }),
     sigInst.draw(2, 2, 2, 2),
@@ -622,7 +624,7 @@ function nodeActive(a) {
   //b is object of active node -- SAH
   b.hidden = !1;
   b.attr.color = b.color;
-  b.attr.lineWidth = 6;
+  b.attr.lineWidth = 25;
   b.attr.strokeStyle = "#000000";
   sigInst.draw(2, 2, 2, 2);
 

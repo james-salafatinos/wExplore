@@ -89,6 +89,8 @@
               <br />
               <br />
               <button class="btn" id="btn_button" type="button">Submit</button>
+              <div id="further_instructions"></div>
+              <div id="wikisearch"></div>
             </div>
           </form>
 
@@ -123,7 +125,7 @@
           <button class="btn" id="btn_view_library">View Graphs</button>
           <br />
           <br />
-          <p id="view_graphs_library"></p>
+          <div id="view_graphs_library"></div>
         </div>
       </div>
       <div id="information"></div>
@@ -174,7 +176,7 @@
           try {
             num_of_links = specific_page.links.length;
             if (num_of_links > 4) {
-              alert(
+              confirm(
                 "Your graph will now be generated...!\n " +
                   "The graph you are requesting has:  " +
                   num_of_links +
@@ -192,17 +194,23 @@
                 });
                 return cube;
               };
-              alert(
-                "Sorry, thats not a valid wikipedia page... it's case sensitive, be exact!" +
-                  "\n\n Maybe try one of these: " +
-                  JSON.stringify(present_options(specific_page.links))
-              );
+              let search = document.getElementById("new_graph_search").value;
+              console.log(search);
+              search_wiki(search);
+              // confirm(
+              //   "Sorry, thats not a valid wikipedia page... it's case senesitive, be exact!" +
+              //     "\n\n Maybe try one of these: " +
+              //     JSON.stringify(present_options(specific_page.links))
+              // );
             }
           } catch {
-            alert(
-              "Sorry, thats not a valid wikipedia page... it's case sensitive, be exact!" +
-                "\n\n Try searching on https://wikipedia.org/ and copying the exact title."
-            );
+            let search = document.getElementById("new_graph_search").value;
+            console.log(search);
+            search_wiki(search);
+            // confirm(
+            //   "Sorry, thats not a valid wikipedia page... it's case sensitive, be exact!" +
+            //     "\n\n Try searching on https://wikipedia.org/ and copying the exact title."
+            // );
           }
         });
       };
@@ -263,6 +271,43 @@
         title = title_node.label;
         document.getElementById("title-name").innerText = title;
       });
+    </script>
+    <script>
+      //Gives hints to the user
+      function search_wiki(a_title) {
+        var url = "https://en.wikipedia.org/w/api.php";
+
+        var params = {
+          action: "query",
+          list: "search",
+          srsearch: JSON.stringify(a_title),
+          srlimit: 5,
+          format: "json",
+        };
+
+        url = url + "?origin=*";
+        Object.keys(params).forEach(function (key) {
+          url += "&" + key + "=" + params[key];
+        });
+
+        fetch(url)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (response) {
+            console.log("response", response);
+            let arr = response.query.search;
+            let titles = "<br>";
+            arr.forEach((d) => {
+              titles = titles + "<li>" + d.title + "</li>";
+            });
+            console.log(response.query.search);
+            document.getElementById("wikisearch").innerHTML = titles;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     </script>
   </body>
 </html>

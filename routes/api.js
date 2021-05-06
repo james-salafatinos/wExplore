@@ -73,10 +73,13 @@ router.get("/find/all-records-titles", (req, res) => {
     {
       _id: 1,
       title: 1,
+      createdAt: 1,
     },
+    { sort: { createdAt: -1 } },
     function (error, data) {
       // ids is an array of all ObjectIds
-      res.send(data);
+      // console.log(data.slice(0, 3));
+      res.send(data.slice(0, 50));
     }
   );
 });
