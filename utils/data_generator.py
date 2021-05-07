@@ -18,21 +18,50 @@ def normalize(a_list):
     return a
 
 
+# def remove_node(node):
+#     remove = True
+#     if node == '(identifier)':
+#         remove = False
+#     elif node == 'Wayback Machine':
+#         remove = False
+#     else:
+#         remove = True
+#     return remove
+
+
 def filter_nodes(G, level=1):
     print('Starting to filter nodes....')
 
     if level == 0:
         return G
     else:
+        print("Starting total nodes, edges:", len(G.nodes), len(G.edges))
+        nodes_to_remove = []
+        for each_node in G.nodes:
+            if '(identifier)' in each_node:
+                nodes_to_remove.append(each_node)
+            if 'Wayback Machine' in each_node:
+                nodes_to_remove.append(each_node)
+            if 'Wikidata' in each_node:
+                nodes_to_remove.append(each_node)
 
-        # READ FIRST: <10 means remove anything with a dgree less than 10
         remove = [node for node, degree in dict(
-            G.degree()).items() if degree < 5]
-        remove2 = [node for node in G.nodes if '(identifier)' in node]
+            G.in_degree()).items() if degree < 5]
+        remove2 = [node for node in G.nodes if
+                   '(identifier)' in node]
+
         G.remove_nodes_from(remove)
         G.remove_nodes_from(remove2)
+        G.remove_nodes_from(nodes_to_remove)
+
         B = sorted(G.degree, key=lambda x: x[1], reverse=False)
         print("First entry in the filtered and sorted by degree graph, ", B[0])
+
+        # Removes the last 5% of nodes that have a small degree
+        small_degree_nodes = [node[0]
+                              for node in B[:int(.05*len(B) // 1)]]
+        print("Ending total nodes, edges:", len(G.nodes), len(G.edges))
+        G.remove_nodes_from(small_degree_nodes)
         return G
 
 
@@ -47,7 +76,7 @@ def get_page_rank_and_colors(G):
     print('Getting node color and size maps....')
 
     PR = nx.algorithms.link_analysis.pagerank_alg.pagerank(G)
-    #cum_sum_page_rank = np.cumsum(pd.Series(PR).sort_values())
+    # cum_sum_page_rank = np.cumsum(pd.Series(PR).sort_values())
     list_of_PR = pd.Series(PR).sort_values()
 
     color_values_from_PR = normalize(list_of_PR)
